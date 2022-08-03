@@ -180,7 +180,7 @@ int main(int argc, char *argv[]) {
 
 
 
-  rclcpp::WallRate loop_rate(20);
+  rclcpp::WallRate loop_rate(8);
 
   while (ret && rclcpp::ok()) {
 

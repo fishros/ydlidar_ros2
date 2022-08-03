@@ -1,17 +1,17 @@
 ydlidar_node:
   ros__parameters:
-    port: /dev/ttyUSB0
+    port: /tmp/fishbot_lasrer
     frame_id: laser_frame
     ignore_array: ""
-    baudrate: 230400
-    samp_rate: 9
+    baudrate: 115200
+    samp_rate: 3
     resolution_fixed: true
-    singleChannel: false
+    singleChannel: true
     auto_reconnect: true
     reversion: true
     isToFLidar: false
     angle_max: 180.0
     angle_min: -180.0
-    max_range: 16.0
-    min_range: 0.01
-    frequency: 10.0
+    max_range: 8.0
+    min_range: 0.10
+    frequency: 5.0
