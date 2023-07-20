@@ -1,6 +1,6 @@
 ydlidar_node:
   ros__parameters:
-    port: /tmp/fishbot_lasrer
+    port: /tmp/fishbot_laser
     frame_id: laser_frame
     ignore_array: ""
     baudrate: 115200
