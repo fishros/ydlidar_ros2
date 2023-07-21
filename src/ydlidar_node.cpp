@@ -58,20 +58,20 @@ int main(int argc, char *argv[])
   rclcpp::init(argc, argv);
   std::string port = "/dev/ttyUSB0";
   std::string frame_id = "laser_frame";
-  if (argc == 2)
-  {
-    port = argv[1];
-  }
-  else if (argc == 3)
-  {
-    printf("port=%s,frame_id=%s\n", argv[1], argv[2]);
-    port = argv[1];
-    frame_id = argv[2];
-  }else{
-    printf("参数列表:port frame_id\n");
-    printf("Eg\t:./ydlidar_node /dev/ttyUSB0 laser_frame\n");
-    return 0;
-  }
+  // if (argc == 2)
+  // {
+  //   port = argv[1];
+  // }
+  // else if (argc == 3)
+  // {
+  //   printf("port=%s,frame_id=%s\n", argv[1], argv[2]);
+  //   port = argv[1];
+  //   frame_id = argv[2];
+  // }else{
+  //   printf("参数列表:port frame_id\n");
+  //   printf("Eg\t:./ydlidar_node /dev/ttyUSB0 laser_frame\n");
+  //   return 0;
+  // }
   auto node = rclcpp::Node::make_shared("ydlidar_node");
   int baudrate = 115200;
   bool reversion = true;
@@ -88,50 +88,50 @@ int main(int argc, char *argv[])
   bool m_isToFLidar = false;
   bool m_Inverted = true;
 
-  // node->declare_parameter<std::string>("port");
-  // node->get_parameter("port", port);
+  node->declare_parameter<std::string>("port");
+  node->get_parameter("port", port);
 
-  // node->declare_parameter<std::string>("frame_id");
-  // node->get_parameter("frame_id", frame_id);
+  node->declare_parameter<std::string>("frame_id");
+  node->get_parameter("frame_id", frame_id);
 
-  // node->declare_parameter<std::string>("ignore_array");
-  // node->get_parameter("ignore_array", list);
+  node->declare_parameter<std::string>("ignore_array");
+  node->get_parameter("ignore_array", list);
 
-  // node->declare_parameter<int>("baudrate");
-  // node->get_parameter("baudrate", baudrate);
+  node->declare_parameter<int>("baudrate");
+  node->get_parameter("baudrate", baudrate);
 
-  // node->declare_parameter<int>("samp_rate");
-  // node->get_parameter("samp_rate", samp_rate);
+  node->declare_parameter<int>("samp_rate");
+  node->get_parameter("samp_rate", samp_rate);
 
-  // node->declare_parameter<bool>("resolution_fixed");
-  // node->get_parameter("resolution_fixed", resolution_fixed);
+  node->declare_parameter<bool>("resolution_fixed");
+  node->get_parameter("resolution_fixed", resolution_fixed);
 
-  // node->declare_parameter<bool>("singleChannel");
-  // node->get_parameter("singleChannel", m_singleChannel);
+  node->declare_parameter<bool>("singleChannel");
+  node->get_parameter("singleChannel", m_singleChannel);
 
-  // node->declare_parameter<bool>("auto_reconnect");
-  // node->get_parameter("auto_reconnect", auto_reconnect);
+  node->declare_parameter<bool>("auto_reconnect");
+  node->get_parameter("auto_reconnect", auto_reconnect);
 
-  // node->declare_parameter<bool>("reversion");
-  // node->get_parameter("reversion", reversion);
+  node->declare_parameter<bool>("reversion");
+  node->get_parameter("reversion", reversion);
 
-  // node->declare_parameter<bool>("isToFLidar");
-  // node->get_parameter("isToFLidar", m_isToFLidar);
+  node->declare_parameter<bool>("isToFLidar");
+  node->get_parameter("isToFLidar", m_isToFLidar);
 
-  // node->declare_parameter<double>("angle_max");
-  // node->get_parameter("angle_max", angle_max);
+  node->declare_parameter<double>("angle_max");
+  node->get_parameter("angle_max", angle_max);
 
-  // node->declare_parameter<double>("angle_min");
-  // node->get_parameter("angle_min", angle_min);
+  node->declare_parameter<double>("angle_min");
+  node->get_parameter("angle_min", angle_min);
 
-  // node->declare_parameter<double>("max_range");
-  // node->get_parameter("max_range", max_range);
+  node->declare_parameter<double>("max_range");
+  node->get_parameter("max_range", max_range);
 
-  // node->declare_parameter<double>("min_range");
-  // node->get_parameter("min_range", min_range);
+  node->declare_parameter<double>("min_range");
+  node->get_parameter("min_range", min_range);
 
-  // node->declare_parameter<double>("frequency");
-  // node->get_parameter("frequency", frequency);
+  node->declare_parameter<double>("frequency");
+  node->get_parameter("frequency", frequency);
 
   std::vector<float> ignore_array = split(list, ',');
 
