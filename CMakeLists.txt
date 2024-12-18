@@ -28,18 +28,6 @@ IF(CMAKE_SIZEOF_VOID_P EQUAL 8)  # Size in bytes!
 ELSE()
 	SET(CMAKE_MRPT_WORD_SIZE 32)
 ENDIF()
-##################################################
-# Add c++11 Flag
-# SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-
-##########################################################
-# IF (CMAKE_SYSTEM_NAME MATCHES "Linux")
-#     MESSAGE(STATUS "Current platform: Linux")
-# 	#Linux add -fPIC
-# 	add_compile_options(-fPIC)
-# ENDIF (CMAKE_SYSTEM_NAME MATCHES "Linux")
-#or
-#set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 #####################################################
 # add cmake module path
