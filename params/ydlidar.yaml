@@ -1,4 +1,4 @@
-ydlidar_ros2_driver_node:
+ydlidar_node:
   ros__parameters:
     port: /tmp/tty_laser
     frame_id: laser_frame
