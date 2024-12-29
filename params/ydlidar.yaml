@@ -11,7 +11,7 @@ ydlidar_node:
     abnormal_check_count: 4 # 异常检查计数
     fixed_resolution: false # 固定分辨率
     reversion: true # 反转
-    inverted: false # 倒置
+    inverted: true # 倒置
     auto_reconnect: true # 自动重连
     isSingleChannel: true # 单通道
     intensity: true # 强度
