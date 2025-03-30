@@ -3,7 +3,7 @@ ydlidar_node:
     port: /dev/ttyUSB0
     frame_id: laser_frame
     ignore_array: ""
-    baudrate: 230400
+    baudrate: 115200
     samp_rate: 9
     resolution_fixed: true
     singleChannel: false
@@ -15,3 +15,5 @@ ydlidar_node:
     max_range: 16.0
     min_range: 0.01
     frequency: 10.0
+
+
