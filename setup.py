@@ -23,7 +23,8 @@ setup(
     entry_points={
         'console_scripts': [
             'ydlidar_node = ydlidar.ydlidar_node:main',
-            'ydlidar_node_socket = ydlidar.ydlidar_node_socket:main',
+            'ydlidar_node_udp = ydlidar.ydlidar_node_udp:main',
+            'ydlidar_node_tcp = ydlidar.ydlidar_node_tcp:main',
         ],
     },
 )

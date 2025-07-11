@@ -11,7 +11,7 @@ class YdlidarNode(Node):
         super().__init__('ydlidar_node')
 
         self.declare_parameter('host', '0.0.0.0')  # Listen on all interfaces
-        self.declare_parameter('socket_port', 8888)
+        self.declare_parameter('socket_port', 8889)
         self.declare_parameter('port', '/dev/ttyUSB0')
         self.declare_parameter('baudrate', 230400)
         self.declare_parameter('frame_id', 'laser_frame')
@@ -24,7 +24,6 @@ class YdlidarNode(Node):
         self.data_buffer = bytearray()
         # self._init_serial()
         self._init_tcp()
-        self._init_udp()
         self._accept_connection()
         
         self.publisher = self.create_publisher(LaserScan, '/scan', 10)
@@ -53,28 +52,20 @@ class YdlidarNode(Node):
     def _init_tcp(self):
         host = self.get_parameter('host').value
         port = self.get_parameter('socket_port').value
-        self.tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # self.tcp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR)  # Allow reuse of the address
-        self.tcp_sock.bind((host, port))
-        self.tcp_sock.listen(1)
-        self.tcp_sock.setblocking(False)
-        self.tcp_conn = None
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR)  # Allow reuse of the address
+        self.sock.bind((host, port))
+        self.sock.listen(1)
+        self.sock.setblocking(False)
+        self.conn = None
         self.get_logger().info(f"等待激光雷达TCP连接: {host}:{port}")
-
-    def _init_udp(self):
-        host = self.get_parameter('host').value
-        port = self.get_parameter('socket_port').value
-        self.udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.udp_sock.bind((host, port))
-        self.udp_sock.setblocking(False)
-        self.get_logger().info(f"等待激光雷达UDP数据: {host}:{port}")
 
     def _accept_connection(self):
         try:
-            if self.tcp_conn is None:
-                self.tcp_conn, addr = self.tcp_sock.accept()
-                self.tcp_conn.setblocking(False)
-                self.get_logger().info(f"激光雷达TCP已连接: {addr}")
+            if self.conn is None:
+                self.conn, addr = self.sock.accept()
+                self.conn.setblocking(False)
+                self.get_logger().info(f"激光雷达已连接: {addr}")
         except BlockingIOError:
             pass
             self.create_timer(0.1, self._accept_connection)
@@ -202,35 +193,15 @@ class YdlidarNode(Node):
     
     def process_serial(self):
         try:
-            # 处理TCP连接数据
-            if self.tcp_conn:
+            if self.conn:
                 try:
-                    data = self.tcp_conn.recv(128)
+                    data = self.conn.recv(128)
                     if data:
                         self.data_buffer += data
                 except BlockingIOError:
                     pass
-                except ConnectionResetError:
-                    self.get_logger().warn("TCP连接已断开")
-                    self.tcp_conn = None
-                    return
-            
-            # 处理UDP数据
-            try:
-                udp_data, addr = self.udp_sock.recvfrom(128)
-                if udp_data:
-                    self.data_buffer += udp_data
-                    # 记录UDP数据源（可选）
-                    if not hasattr(self, 'udp_client_addr'):
-                        self.udp_client_addr = addr
-                        self.get_logger().info(f"激光雷达UDP数据源: {addr}")
-            except BlockingIOError:
-                pass
-            
-            # 如果没有TCP连接也没有UDP数据，直接返回
-            if self.tcp_conn is None and not hasattr(self, 'udp_client_addr'):
+            else:
                 return
-                
             # if self.ser.in_waiting > 0:
             #     self.data_buffer += self.ser.read(self.ser.in_waiting)
             
@@ -348,19 +319,13 @@ class YdlidarNode(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = YdlidarNode()
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        node.get_logger().info("节点关闭")
-    finally:
-        # 关闭所有socket连接
-        if hasattr(node, 'tcp_conn') and node.tcp_conn:
-            node.tcp_conn.close()
-        if hasattr(node, 'tcp_sock'):
-            node.tcp_sock.close()
-        if hasattr(node, 'udp_sock'):
-            node.udp_sock.close()
-        node.destroy_node()
+    rclpy.spin(node)
+    # try:
+    #     rclpy.spin(node)
+    # except KeyboardInterrupt:
+    #     node.get_logger().info("节点关闭")
+    # finally:
+    #     node.destroy_node()
     rclpy.shutdown()
 
 
